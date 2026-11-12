@@ -1,0 +1,381 @@
+:root {
+    --kp-bg: #f6f0e6;
+    --kp-surface: #fdfbf7;
+    --kp-surface-alt: #ede3d2;
+    --kp-text: #231710;
+    --kp-text-muted: #543d2e;
+    --kp-border: #7a5c43;
+    --kp-espresso: #231710;
+    --kp-primary: #6f3e18;
+    --kp-primary-hover: #562f11;
+    --kp-success: #2d5a27;
+    --kp-danger: #9e2a2b;
+    --kp-focus: #6f3e18;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+    background-color: var(--kp-bg) !important;
+    color: var(--kp-text) !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1rem);
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+.h3,
+.h4,
+.h5,
+.navbar-brand {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    letter-spacing: 0.01em;
+}
+
+a[href],
+button,
+summary,
+select,
+label[for],
+input[type="checkbox"],
+input[type="radio"],
+[role="button"],
+[role="tab"],
+[role="switch"] {
+    cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+.btn.disabled,
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+/* Minimum 44x44px touch targets per R-03 */
+.btn,
+.form-control,
+.form-select,
+.nav-link {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+textarea.form-control {
+    min-height: 88px;
+}
+
+.btn {
+    justify-content: center;
+    font-weight: 600;
+    border-radius: 0.375rem;
+}
+
+/* High-contrast focus ring per R-32 */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-select:focus-visible {
+    outline: 3px solid var(--kp-focus);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+/* Cafe Navbar & Dark Espresso Surfaces (#FFFFFF on #231710 = 17.48:1) */
+.navbar.bg-dark,
+.bg-dark,
+.btn-dark {
+    background-color: var(--kp-espresso) !important;
+    border-color: var(--kp-espresso) !important;
+    color: #ffffff !important;
+}
+
+.btn-dark:hover,
+.btn-dark:active {
+    background-color: #3a261a !important;
+    border-color: #3a261a !important;
+    color: #ffffff !important;
+}
+
+.navbar-dark .navbar-brand {
+    color: #f6f0e6 !important;
+    font-size: 1.35rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #ede3d2 !important;
+    border-radius: 0.375rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link.active {
+    background-color: #3a261a;
+    color: #ffffff !important;
+}
+
+/* Caramel Roast Primary (#FFFFFF on #6F3E18 = 8.83:1) */
+.btn-primary,
+.bg-primary {
+    background-color: var(--kp-primary) !important;
+    border-color: var(--kp-primary-hover) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:active {
+    background-color: var(--kp-primary-hover) !important;
+    border-color: #3e210b !important;
+    color: #ffffff !important;
+}
+
+.text-primary {
+    color: var(--kp-primary) !important;
+}
+
+/* Matcha Leaf Success & Discount (#FFFFFF on #2D5A27 = 8.07:1; #2D5A27 on #FDFBF7 = 7.80:1) */
+.btn-success,
+.bg-success {
+    background-color: var(--kp-success) !important;
+    border-color: #22441d !important;
+    color: #ffffff !important;
+}
+
+.btn-success:hover,
+.btn-success:active {
+    background-color: #22441d !important;
+    border-color: #193315 !important;
+    color: #ffffff !important;
+}
+
+.text-success {
+    color: var(--kp-success) !important;
+}
+
+/* Warm Berry Danger (#FFFFFF on #9E2A2B = 7.45:1) */
+.btn-danger,
+.bg-danger {
+    background-color: var(--kp-danger) !important;
+    border-color: #7d2021 !important;
+    color: #ffffff !important;
+}
+
+.btn-danger:hover,
+.btn-danger:active {
+    background-color: #7d2021 !important;
+    border-color: #63191a !important;
+    color: #ffffff !important;
+}
+
+/* Warm Espresso Muted Secondary (#FFFFFF on #543D2E = 9.98:1) */
+.btn-secondary,
+.bg-secondary {
+    background-color: #543d2e !important;
+    border-color: #3e2c20 !important;
+    color: #ffffff !important;
+}
+
+.btn-secondary:hover,
+.btn-secondary:active {
+    background-color: #3e2c20 !important;
+    border-color: #231710 !important;
+    color: #ffffff !important;
+}
+
+.btn-light {
+    background-color: #f6f0e6 !important;
+    border-color: #d6c5b0 !important;
+    color: #231710 !important;
+}
+
+.btn-light:hover,
+.btn-light:active {
+    background-color: #e6d8c3 !important;
+    border-color: #7a5c43 !important;
+    color: #231710 !important;
+}
+
+.text-muted {
+    color: var(--kp-text-muted) !important;
+}
+
+/* Warm Parchment Cards & Tables */
+.card {
+    background-color: var(--kp-surface);
+    color: var(--kp-text);
+    border: 1.5px solid var(--kp-border);
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-bottom: 1.5px solid var(--kp-border);
+}
+
+.table {
+    --bs-table-bg: #fdfbf7;
+    --bs-table-striped-bg: #f3eadc;
+    --bs-table-hover-bg: #eadcc7;
+    --bs-table-color: #231710;
+    --bs-table-striped-color: #231710;
+    --bs-table-hover-color: #231710;
+    --bs-table-border-color: #b89f86;
+    color: var(--kp-text);
+    border-color: #b89f86;
+}
+
+.table-dark {
+    --bs-table-bg: #231710;
+    --bs-table-color: #f6f0e6;
+    --bs-table-border-color: #543d2e;
+}
+
+.table-secondary {
+    --bs-table-bg: #e6d8c3;
+    --bs-table-color: #231710;
+}
+
+/* Cafe Alerts */
+.alert-info {
+    background-color: #efe5d5;
+    border: 1.5px solid #6f3e18;
+    color: #231710;
+}
+
+.alert-warning {
+    background-color: #f5e6cc;
+    border: 1.5px solid #8c5319;
+    color: #231710;
+}
+
+.alert-success {
+    background-color: #e3efe0;
+    border: 1.5px solid #2d5a27;
+    color: #1b3817;
+}
+
+.alert-danger {
+    background-color: #f8e1e1;
+    border: 1.5px solid #9e2a2b;
+    color: #4f1213;
+}
+
+/* Form Controls */
+.form-control,
+.form-select {
+    background-color: #ffffff;
+    color: var(--kp-text);
+    border: 1.5px solid var(--kp-border);
+}
+
+.form-control::placeholder {
+    color: var(--kp-text-muted);
+    opacity: 0.85;
+}
+
+.img-placeholder {
+    width: 80px;
+    height: 80px;
+    border: 1.5px dashed var(--kp-border);
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 0.25rem;
+    background-color: var(--kp-surface-alt);
+    color: var(--kp-text-muted);
+}
+
+.product-thumb {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 0.375rem;
+    border: 1.5px solid var(--kp-border);
+}
+
+.price-col {
+    white-space: nowrap;
+    min-width: 190px;
+}
+
+.desc-col {
+    max-width: 280px;
+}
+
+.name-col {
+    min-width: 170px;
+}
+
+.chart-bar-track {
+    width: 100%;
+    height: 24px;
+    background-color: var(--kp-surface-alt);
+    border: 1px solid var(--kp-border);
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.chart-bar-fill {
+    height: 100%;
+    background-color: var(--kp-primary);
+}
+
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 2000;
+    padding: 0.5rem 1rem;
+    background: var(--kp-primary);
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    left: 0.5rem;
+    top: 0.5rem;
+}
+
+footer {
+    border-top-color: var(--kp-border) !important;
+}
+
+@media (max-width: 767.98px) {
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    .card-body {
+        padding: 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

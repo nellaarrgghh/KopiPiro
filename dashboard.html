@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kopipiro - Staff &amp; Owner API Dashboard (dashboard.html)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="site-header mb-4">
+        <div class="container py-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-3">
+                <a class="site-brand" href="index.php">Kopipiro</a>
+                <nav class="d-flex flex-wrap gap-1" aria-label="Primary navigation">
+                    <a class="nav-link-item" href="index.php">PHP Menu</a>
+                    <a class="nav-link-item" href="shop.html">API Shop</a>
+                    <a class="nav-link-item active" href="dashboard.html">API Dashboard</a>
+                    <a class="nav-link-item" href="orders.php">PHP Orders</a>
+                </nav>
+            </div>
+            <div id="userInfo" class="small"></div>
+        </div>
+    </header>
+
+    <main class="container mb-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h1 class="h3 fw-bold mb-1">Owner &amp; Cashier API Dashboard</h1>
+                <p class="text-muted small mb-0">Consumes <code>api/orders.php</code>, <code>api/sales.php</code>, and <code>api/export.php</code>.</p>
+            </div>
+            <div id="ownerActions" class="d-none">
+                <a href="api/export.php" class="btn btn-success btn-sm">Download Excel (api/export.php)</a>
+            </div>
+        </div>
+
+        <div id="salesSection" class="card p-3 mb-4 d-none">
+            <h2 class="h5 fw-bold mb-3">Owner Sales Charts (Chart.js)</h2>
+            <div class="row g-4">
+                <div class="col-12 col-md-6" style="height: 240px;">
+                    <canvas id="dailyChart"></canvas>
+                </div>
+                <div class="col-12 col-md-6" style="height: 240px;">
+                    <canvas id="topChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-3">
+            <h2 class="h5 fw-bold mb-3">Orders Queue</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Order Code</th>
+                            <th>Customer</th>
+                            <th>Cashier</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orderRows">
+                        <tr><td colspan="5" class="text-center py-4">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+    function formatRp(n) {
+        return 'Rp ' + (Number(n) || 0).toLocaleString('id-ID');
+    }
+
+    async function loadDashboard() {
+        const meRes = await fetch('api/auth.php?action=me', { credentials: 'same-origin' });
+        const meData = await meRes.json();
+        const user = meData.user;
+        if (!user) {
+            window.location.href = 'login.php';
+            return;
+        }
+        document.getElementById('userInfo').innerHTML = `Signed in as <strong>${user.name}</strong> (${user.role})`;
+
+        if (user.role === 'owner') {
+            document.getElementById('ownerActions').classList.remove('d-none');
+            document.getElementById('salesSection').classList.remove('d-none');
+            const sRes = await fetch('api/sales.php', { credentials: 'same-origin' });
+            if (sRes.ok) {
+                const sData = await sRes.json();
+                new Chart(document.getElementById('dailyChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: (sData.daily || []).map(d => d.day),
+                        datasets: [{ label: 'Daily Revenue (Rp)', data: (sData.daily || []).map(d => Number(d.revenue)), backgroundColor: '#5c3317' }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+                new Chart(document.getElementById('topChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: (sData.top || []).map(t => t.name.split(' (')[0]),
+                        datasets: [{ label: 'Top Products Sold', data: (sData.top || []).map(t => Number(t.qty)), backgroundColor: '#2d5a3c' }]
+                    },
+                    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+                });
+            }
+        }
+
+        const oRes = await fetch('api/orders.php', { credentials: 'same-origin' });
+        const oData = await oRes.json();
+        const orders = oData.orders || [];
+        const tbody = document.getElementById('orderRows');
+        if (!orders.length) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4">No orders found for your account.</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = orders.map(o => `<tr>
+            <td class="font-monospace fw-bold">${o.order_code || ('#' + o.id)}</td>
+            <td>${o.customer_name}</td>
+            <td>${o.cashier_name || 'Unassigned'}</td>
+            <td class="font-monospace">${formatRp(o.total)}</td>
+            <td>
+                <select class="form-select form-select-sm status-select" data-id="${o.id}">
+                    <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>pending</option>
+                    <option value="paid" ${o.status === 'paid' ? 'selected' : ''}>paid</option>
+                    <option value="done" ${o.status === 'done' ? 'selected' : ''}>done</option>
+                    <option value="Completed" ${o.status === 'Completed' ? 'selected' : ''}>Completed</option>
+                </select>
+            </td>
+        </tr>`).join('');
+
+        document.querySelectorAll('.status-select').forEach(sel => {
+            sel.addEventListener('change', async () => {
+                await fetch(`api/orders.php?id=${sel.dataset.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ status: sel.value })
+                });
+                window.location.reload();
+            });
+        });
+    }
+
+    loadDashboard();
+    </script>
+</body>
+</html>
+
